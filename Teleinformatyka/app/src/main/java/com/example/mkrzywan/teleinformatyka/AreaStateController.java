@@ -2,9 +2,6 @@ package com.example.mkrzywan.teleinformatyka;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.drawable.Icon;
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.view.View;
 
 /**
