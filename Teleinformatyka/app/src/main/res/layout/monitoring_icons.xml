@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:layout_marginRight="20dp">
+    <com.example.mkrzywan.teleinformatyka.IconFontButton
+        android:id="@+id/cog_id"
+        android:layout_width="@dimen/icon_dimension"
+        android:layout_height="@dimen/icon_dimension"
+        android:text="@string/fa_square"
+        android:background="@android:color/transparent"
+        android:layout_alignParentRight="true"
+        android:clickable="false"
+        android:textSize="@dimen/fontsize_h2"/>
+    <com.example.mkrzywan.teleinformatyka.IconFontButton
+        android:id="@+id/ventilator"
+        android:layout_width="@dimen/icon_dimension"
+        android:layout_height="@dimen/icon_dimension"
+        android:text="@string/fa_cog"
+        android:background="@android:color/transparent"
+        android:layout_toLeftOf="@+id/cog_id"
+        android:clickable="false"
+        android:textSize="@dimen/fontsize_h2"/>
+    <com.example.mkrzywan.teleinformatyka.IconFontButton
+        android:id="@+id/light_bulb_id"
+        android:layout_toLeftOf="@+id/ventilator"
+        android:layout_width="@dimen/icon_dimension"
+        android:layout_height="@dimen/icon_dimension"
+        android:text="@string/fa_lightbulb_o"
+        android:background="@android:color/transparent"
+        android:clickable="false"
+        android:textSize="@dimen/fontsize_h2"/>
+
+
+</RelativeLayout>

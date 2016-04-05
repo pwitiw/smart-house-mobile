@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Teleinformatyka</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="living_room">Salon</string>
+    <string name="bedroom">Sypialnia</string>
+    <string name="bathroom">Łazienka</string>
+    <string name="garden">Ogród</string>
+    <string name="app_title">Inteligentny dom</string>
+    <string name="title_activity_living_room">LivingRoom</string>
+    <string name="light">Światło:</string>
+    <string name="ventilation">Wentylacja:</string>
+    <string name="roller_blinds">Położenie rolet:</string>
+</resources>

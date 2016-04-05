@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--<color name="primary_text">#B3000000</color>-->
+    <!--<color name="secondary_text">#66000000</color>-->
+    <color name="touch">#e0e0e0</color>
+
+    <color name="primary">#E91E63</color>
+    <color name="primary_dark">#C2185B</color>
+    <color name="primary_light">#7986CB</color>
+    <color name="accent">#3F51B5</color>
+    <color name="primary_text">#212121</color>
+    <color name="secondary_text">#727272</color>
+    <color name="icons">#FFFFFF</color>
+    <color name="divider">#B6B6B6</color>
+
+    <color name="lr_primary">#F5E1AB</color>
+    <color name="lr_secondary">#F2D78C</color>
+    <color name="lr_thirdy">#B77215</color>
+
+    <color name="default_screen_bg">#f9f9f9</color>
+    <color name="rounded_container_bg">#222222</color>
+    <color name="rounded_container_border">#3b3f44</color>
+    <color name="light_gray_header_color">#646663</color>
+</resources>

@@ -1,0 +1,81 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:colorPrimary">@color/primary</item>
+        <!-- Customize your theme here. -->
+    </style>
+
+    <style name="ToolbarStyle" parent="Widget.AppCompat.Toolbar">
+        <item name="android:focusable">true</item>
+        <item name="android:focusableInTouchMode">true</item>
+        <item name="android:theme">@style/Theme.CustomActionBar</item>
+        <item name="popupTheme">@style/Theme.OverflowMenuStyle</item>
+        <item name="android:textColorPrimary">@color/primary_text</item>
+        <item name="android:textColorSecondary">@color/secondary_text</item>
+    </style>
+
+    <style name="Theme.CustomActionBar" parent="Theme.CompactNoActionBar">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:textColorPrimary">@color/primary_text</item>
+        <item name="android:textColorSecondary">@color/secondary_text</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <!--<item name="touch_color">@color/touch</item>-->
+    </style>
+
+    <style name="Theme.CompactNoActionBar" parent="Theme.AppCompat">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.OverflowMenuStyle" parent="Theme.AppCompat.NoActionBar">
+        <!-- Must be defined to support foreground color in older APIs -->
+        <item name="android:textColor">@color/primary_text</item>
+        <item name="android:textColorPrimary">@color/primary_text</item>
+        <item name="actionMenuTextColor">@color/primary_text</item>
+
+        <!-- Both android:background and background have to be defined to support compatibility -->
+        <item name="background">@color/primary</item>
+        <item name="android:background">@color/primary</item>
+
+        <!-- This option makes background of a text view inside a menu item change on tap -->
+        <item name="android:drawSelectorOnTop">true</item>
+    </style>
+
+    <style name="MobileToolbarTitleStyle" parent="ToolbarTitleStyle">
+        <item name="android:textSize">@dimen/fontsize_h2</item>
+    </style>
+
+    <style name="ToolbarTitleStyle" parent="android:Widget.TextView">
+        <item name="android:textColor">@color/icons</item>
+        <item name="android:textColorHint">@color/secondary_text</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="switchCompatStyle">
+        <item name="colorControlActivated">@color/primary</item>
+    </style>
+
+    <style name="ColoredButton" parent="Widget.AppCompat.Button">
+        <item name="colorButtonNormal">@android:color/transparent</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="ContextMenuSeekbarStyle">
+        <item name="android:thumb">@drawable/sliderpin_stateful</item>
+        <item name="android:progressDrawable">@drawable/progress_drawable</item>
+        <item name="android:minHeight">@dimen/context_menu_seekbar_height</item>
+        <item name="android:maxHeight">@dimen/context_menu_seekbar_height</item>
+        <item name="android:paddingLeft">9.5dp</item>
+        <item name="android:paddingRight">9.5dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+    </style>
+
+</resources>
