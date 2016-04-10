@@ -47,11 +47,11 @@ public class AreaStateController{
 
                 if(light){
                     lightButton.setTextColor(Color.parseColor("#651FFF"));
-                    sendHttpRequest(rasberryCommands[0]);
+                    sendHttpPostRequest(HttpHelper.STATE_CHANGE, rasberryCommands[0]);
                 }
                 else{
                     lightButton.setTextColor(Color.BLACK);
-                    sendHttpRequest(rasberryCommands[1]);
+                    sendHttpPostRequest(HttpHelper.STATE_CHANGE, rasberryCommands[1]);
                 }
             }
         });
@@ -65,14 +65,14 @@ public class AreaStateController{
                     ventilationButton.setTextColor(Color.parseColor("#651FFF"));
 
                     if(rasberryCommands.length > RasberryCommand.MINIMUM_COMMANDS_NUMBER){
-                        sendHttpRequest(rasberryCommands[2]);
+                        sendHttpPostRequest(HttpHelper.STATE_CHANGE, rasberryCommands[2]);
                     }
                 }
                 else{
                     ventilationButton.setTextColor(Color.BLACK);
 
                     if(rasberryCommands.length > RasberryCommand.MINIMUM_COMMANDS_NUMBER){
-                        sendHttpRequest(rasberryCommands[3]);
+                        sendHttpPostRequest(HttpHelper.STATE_CHANGE, rasberryCommands[3]);
                     }
                 }
             }
@@ -100,7 +100,7 @@ public class AreaStateController{
                 }
 
                 if(rasberryCommands.length > RasberryCommand.MINIMUM_COMMANDS_NUMBER  && httpRequestIndex != -1) {
-                    sendHttpRequest(rasberryCommands[httpRequestIndex]);
+                    sendHttpPostRequest(HttpHelper.STATE_CHANGE, rasberryCommands[httpRequestIndex]);
                 }
             }
         });
@@ -138,9 +138,9 @@ public class AreaStateController{
         this.rollerBlindsState = rollerBlindsState;
     }
 
-    private void sendHttpRequest(String command){
+    private void sendHttpPostRequest(String key, String value){
         try {
-            HttpHelper.makeRequest(context, command);
+            HttpHelper.makePostRequestWithSingleParam(context, key, value);
         } catch (Exception e) {
             e.printStackTrace();
         }
