@@ -5,9 +5,17 @@ package com.example.mkrzywan.teleinformatyka;
  */
 public class RasberryCommand {
 
-    public static final String LIGHT = "LIGHT";
-    public static final String VENTILATION = "VENTILATION";
-    public static final String ROLLER_BLINDS = "ROLLER_BLINDS";
+ //Pins
+    public static final int LIVING_ROOM_LIGHT = 11;
+    public static final int LIVING_ROOM_VENTILATION = 12;
+    public static final int LIVING_ROOM_ROLLER_BLINDS = 13;
+    public static final int BEDROOM_LIGHT = 14;
+    public static final int BEDROOM_VENTILATION = 15;
+    public static final int BEDROOM_ROLLER_BLINDS = 16;
+    public static final int BATHROOM_LIGHT = 18;
+    public static final int BATHROOM_VENTILATION = 19;
+    public static final int BATHROOM_ROLLER_BLINDS = 21;
+    public static final int GARDEN_LIGHT = 22;
 
     public static final String LIVING_ROOM_LIGHT_ON = "11-1";
     public static final String LIVING_ROOM_LIGHT_OFF = "11-0";
@@ -37,7 +45,8 @@ public class RasberryCommand {
     public static final String GARDEN_LIGHT_OFF = "22-0";
 
     public static String STATE_CHANGE = "stateChange";
-    public static String ACTION_GET_STATE = "action=getState";
+    public static String ACTION_GET_STATE = "getState";
+    public static String PIN_NUMBER = "pinNumber";
 
     public static final String[] living_room_commands = {LIVING_ROOM_LIGHT_ON, LIVING_ROOM_LIGHT_OFF,
             LIVING_ROOM_VENTILATION_ON, LIVING_ROOM_VENTILATION_OFF,
@@ -54,5 +63,10 @@ public class RasberryCommand {
 
     public static final String[] garden_commands = { GARDEN_LIGHT_ON, GARDEN_LIGHT_OFF};
 
-    public static int MINIMUM_COMMANDS_NUMBER = garden_commands.length;
+    public static final int[] living_room_pins = {LIVING_ROOM_LIGHT, LIVING_ROOM_VENTILATION, LIVING_ROOM_ROLLER_BLINDS};
+    public static final int[] bedroom_pins = { BEDROOM_LIGHT, BEDROOM_VENTILATION, BEDROOM_ROLLER_BLINDS };
+    public static final int[] bathroom_pins = { BATHROOM_LIGHT, BATHROOM_VENTILATION, BATHROOM_ROLLER_BLINDS };
+    public static final int[] garden_pins = { GARDEN_LIGHT };
+
+    public static int MINIMUM_ROOM_FUNCTIONS_NUMBER = garden_commands.length;
 }

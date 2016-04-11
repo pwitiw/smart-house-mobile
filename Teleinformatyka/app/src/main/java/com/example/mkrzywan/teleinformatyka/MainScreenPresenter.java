@@ -15,7 +15,6 @@ import java.util.Map;
 public class MainScreenPresenter {
 
     private MainActivityView view;
-    public static HttpHelper httpHelper;
     public static BuildingStateController buildingStateController;
 
     public MainScreenPresenter(MainActivityView view, Activity activity){

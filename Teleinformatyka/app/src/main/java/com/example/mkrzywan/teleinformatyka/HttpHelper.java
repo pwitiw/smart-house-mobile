@@ -22,6 +22,7 @@ public class HttpHelper {
     private static String SEMICOLON_SEPARATOR = ":";
     private static String SLASH_SEPARATOR = "/";
     private static String QUESTION_MARK_SEPARATOR = "?";
+    private static String EQUALITY_SIGN = "=";
     private static HttpHelper instance = null;
 
     private HttpHelper(){}
@@ -34,20 +35,20 @@ public class HttpHelper {
             return instance;
     }
 
-    public void makeGetRequest(Context context, String[] parameters,
+    public void makeGetRequest(Context context, final int pinNumber,
                                final OnResponseListener listener){
         // Instantiate the RequestQueue.
         com.android.volley.RequestQueue queue = Volley.newRequestQueue(context);
-        String url = ADDRESS + SEMICOLON_SEPARATOR + PORT;
+        String url = ADDRESS + SEMICOLON_SEPARATOR + PORT + SLASH_SEPARATOR +  RasberryCommand.ACTION_GET_STATE;
 
-        url = loadParametersToUrl(url, parameters);
+        url = loadParameterToUrl(url, pinNumber);
 
         // Request a string response from the provided URL.
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        listener.onResponse(response);
+                        listener.onResponse(pinNumber, response);
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -59,12 +60,10 @@ public class HttpHelper {
         queue.add(stringRequest);
     }
 
-    private String loadParametersToUrl(String url, String[] paramPairs){
-        if(paramPairs.length != 0){
-            url = url + QUESTION_MARK_SEPARATOR;
-        }
-        for(String paramPair : paramPairs){
-            url = url + paramPair;
+    private String loadParameterToUrl(String url, int pinNumber){
+        if(pinNumber > -1){
+            url = url + QUESTION_MARK_SEPARATOR + RasberryCommand.PIN_NUMBER +
+                    EQUALITY_SIGN + pinNumber;
         }
         return url;
     }

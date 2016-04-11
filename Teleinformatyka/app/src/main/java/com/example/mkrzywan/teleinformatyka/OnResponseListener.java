@@ -5,5 +5,5 @@ package com.example.mkrzywan.teleinformatyka;
  */
 public interface OnResponseListener {
 
-    public void onResponse(String response);
+    public void onResponse(int key, String response);
 }
