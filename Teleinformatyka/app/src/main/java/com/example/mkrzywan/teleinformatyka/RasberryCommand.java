@@ -5,6 +5,10 @@ package com.example.mkrzywan.teleinformatyka;
  */
 public class RasberryCommand {
 
+    public static final String LIGHT = "LIGHT";
+    public static final String VENTILATION = "VENTILATION";
+    public static final String ROLLER_BLINDS = "ROLLER_BLINDS";
+
     public static final String LIVING_ROOM_LIGHT_ON = "11-1";
     public static final String LIVING_ROOM_LIGHT_OFF = "11-0";
     public static final String LIVING_ROOM_VENTILATION_ON = "12-1";
@@ -31,6 +35,9 @@ public class RasberryCommand {
 
     public static final String GARDEN_LIGHT_ON = "22-1";
     public static final String GARDEN_LIGHT_OFF = "22-0";
+
+    public static String STATE_CHANGE = "stateChange";
+    public static String ACTION_GET_STATE = "action=getState";
 
     public static final String[] living_room_commands = {LIVING_ROOM_LIGHT_ON, LIVING_ROOM_LIGHT_OFF,
             LIVING_ROOM_VENTILATION_ON, LIVING_ROOM_VENTILATION_OFF,

@@ -20,7 +20,6 @@ public class MainScreenPresenter {
 
     public MainScreenPresenter(MainActivityView view, Activity activity){
         this.view = view;
-        httpHelper = new HttpHelper();
         buildingStateController = new BuildingStateController(activity);
     }
 }

@@ -2,17 +2,23 @@ package com.example.mkrzywan.teleinformatyka;
 
 import android.app.Activity;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created by MKRZYWAN on 20.03.2016.
  */
-public class BuildingStateController {
+public class BuildingStateController implements OnResponseListener {
     private AreaStateController bathroomController;
     private AreaStateController livingRoomController;
     private AreaStateController bedroomController;
     private AreaStateController gardenController;
 
+    private HttpHelper httpHelper;
+
+
     public BuildingStateController(Activity activity){
-       initialize(activity);
+        initialize(activity);
     }
 
     private void initialize(Activity activity){
@@ -40,21 +46,36 @@ public class BuildingStateController {
         gardenController.initialize((IconFontButton)activity.findViewById(R.id.light_bulb_4),
                 (IconFontButton)activity.findViewById(R.id.ventilator_4),
                 (IconFontButton)activity.findViewById(R.id.cog_4), rollerBlindsSymbols);
+
+        httpHelper = HttpHelper.getInstance();
+
+        checkCurrentBuildingState(activity);
     }
 
-    public void setBathroomController(AreaStateController bathroomController) {
-        this.bathroomController = bathroomController;
+    private void checkCurrentBuildingState(Activity activity){
+        String[] params = {RasberryCommand.ACTION_GET_STATE};
+        httpHelper.makeGetRequest(activity, params , this);
     }
 
-    public void setLivingRoomController(AreaStateController livingRoomController) {
-        this.livingRoomController = livingRoomController;
+    private void addSettingToApropriateController(String key, String value){
+        if(key.startsWith(AreaType.LIVING_ROOM.toString())){
+            livingRoomController.actualizeSettings(key, value);
+        }else if(key.startsWith(AreaType.BEDROOM.toString())){
+            bedroomController.actualizeSettings(key, value);
+        }else if(key.startsWith(AreaType.BATHROOM.toString())){
+            bathroomController.actualizeSettings(key, value);
+        }else{
+            gardenController.actualizeSettings(key, value);
+        }
     }
 
-    public void setBedroomController(AreaStateController bedroomController) {
-        this.bedroomController = bedroomController;
-    }
+    @Override
+    public void onResponse(String response) {
+        //TODO convert response to key-values map
+        Map<String, String> settingsMap = new HashMap();
 
-    public void setGardenController(AreaStateController gardenController) {
-        this.gardenController = gardenController;
+        for(String key : settingsMap.keySet()){
+            addSettingToApropriateController(key, settingsMap.get(key));
+        }
     }
 }

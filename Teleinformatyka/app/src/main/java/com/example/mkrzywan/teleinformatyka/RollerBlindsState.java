@@ -25,19 +25,3 @@ public enum RollerBlindsState {
     }
 
 }
-
-//public class RollerBlindState{
-//
-//    public enum STATE{
-//        OPEN, SEMI_OPEN, CLOSED;
-//    }
-//
-//    public static void main(String args[]) {
-//
-//        EnumMap<STATE, Integer> stateMap = new EnumMap<STATE, Integer>(STATE.class);
-//
-//        stateMap.put(STATE.CLOSED, 0);
-//        stateMap.put(STATE.SEMI_OPEN, 1);
-//        stateMap.put(STATE.OPEN, 2);
-//    }
-//}

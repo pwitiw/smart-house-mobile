@@ -14,6 +14,8 @@ public class AreaStateController{
     public boolean ventilation = false;
     public RollerBlindsState rollerBlindsState = RollerBlindsState.CLOSED;
 
+    private HttpHelper httpHelper;
+
     private String [] rollerBlindsSymbols;
     private String [] rasberryCommands;
 
@@ -24,6 +26,7 @@ public class AreaStateController{
     private IconFontButton rollerBlindsButton;
 
     public AreaStateController(String[] commands, Context context){
+        this.httpHelper = HttpHelper.getInstance();
         this.rasberryCommands = commands;
         this.context = context;
     }
@@ -47,11 +50,11 @@ public class AreaStateController{
 
                 if(light){
                     lightButton.setTextColor(Color.parseColor("#651FFF"));
-                    sendHttpPostRequest(HttpHelper.STATE_CHANGE, rasberryCommands[0]);
+                    sendHttpPostRequest(RasberryCommand.STATE_CHANGE, rasberryCommands[0]);
                 }
                 else{
                     lightButton.setTextColor(Color.BLACK);
-                    sendHttpPostRequest(HttpHelper.STATE_CHANGE, rasberryCommands[1]);
+                    sendHttpPostRequest(RasberryCommand.STATE_CHANGE, rasberryCommands[1]);
                 }
             }
         });
@@ -65,14 +68,14 @@ public class AreaStateController{
                     ventilationButton.setTextColor(Color.parseColor("#651FFF"));
 
                     if(rasberryCommands.length > RasberryCommand.MINIMUM_COMMANDS_NUMBER){
-                        sendHttpPostRequest(HttpHelper.STATE_CHANGE, rasberryCommands[2]);
+                        sendHttpPostRequest(RasberryCommand.STATE_CHANGE, rasberryCommands[2]);
                     }
                 }
                 else{
                     ventilationButton.setTextColor(Color.BLACK);
 
                     if(rasberryCommands.length > RasberryCommand.MINIMUM_COMMANDS_NUMBER){
-                        sendHttpPostRequest(HttpHelper.STATE_CHANGE, rasberryCommands[3]);
+                        sendHttpPostRequest(RasberryCommand.STATE_CHANGE, rasberryCommands[3]);
                     }
                 }
             }
@@ -100,10 +103,31 @@ public class AreaStateController{
                 }
 
                 if(rasberryCommands.length > RasberryCommand.MINIMUM_COMMANDS_NUMBER  && httpRequestIndex != -1) {
-                    sendHttpPostRequest(HttpHelper.STATE_CHANGE, rasberryCommands[httpRequestIndex]);
+                    sendHttpPostRequest(RasberryCommand.STATE_CHANGE, rasberryCommands[httpRequestIndex]);
                 }
             }
         });
+    }
+
+    private void setLight(String value){
+        if(Integer.parseInt(value) == 0){
+            light = false;
+        }else{
+            light = true;
+        }
+    }
+
+    private void setVentilation(String value){
+        if(Integer.parseInt(value) == 0){
+            ventilation = false;
+        }else{
+            ventilation = true;
+        }
+    }
+
+    private void setRollerBlindsState(String value){
+        int index = Integer.parseInt(value);
+        rollerBlindsState = RollerBlindsState.values()[index];
     }
 
     public void turnLightOn(){
@@ -140,9 +164,19 @@ public class AreaStateController{
 
     private void sendHttpPostRequest(String key, String value){
         try {
-            HttpHelper.makePostRequestWithSingleParam(context, key, value);
+            httpHelper.makePostRequestWithSingleParam(context, key, value);
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    public void actualizeSettings(String key, String value){
+        if(key.contains(RasberryCommand.LIGHT)){
+            setLight(value);
+        }else if(key.contains(RasberryCommand.VENTILATION)){
+            setVentilation(value);
+        }else{
+            setRollerBlindsState(value);
         }
     }
 }

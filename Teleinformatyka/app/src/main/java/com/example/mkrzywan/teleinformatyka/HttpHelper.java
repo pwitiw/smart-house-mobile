@@ -21,20 +21,33 @@ public class HttpHelper {
     private static String PORT = "5000";
     private static String SEMICOLON_SEPARATOR = ":";
     private static String SLASH_SEPARATOR = "/";
-    public static String STATE_CHANGE = "stateChange";
-    public static String GET_STATE = "getState";
+    private static String QUESTION_MARK_SEPARATOR = "?";
+    private static HttpHelper instance = null;
 
-    public static void makeGetRequest(Context context, String[] parameters){
+    private HttpHelper(){}
+
+    public static HttpHelper getInstance(){
+        if(instance == null){
+            instance = new HttpHelper();
+        }
+
+            return instance;
+    }
+
+    public void makeGetRequest(Context context, String[] parameters,
+                               final OnResponseListener listener){
         // Instantiate the RequestQueue.
         com.android.volley.RequestQueue queue = Volley.newRequestQueue(context);
-        String url = ADDRESS + SEMICOLON_SEPARATOR + PORT + SLASH_SEPARATOR;
+        String url = ADDRESS + SEMICOLON_SEPARATOR + PORT;
+
+        url = loadParametersToUrl(url, parameters);
 
         // Request a string response from the provided URL.
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Log.i("RESPONSE: ", response);
+                        listener.onResponse(response);
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -46,11 +59,21 @@ public class HttpHelper {
         queue.add(stringRequest);
     }
 
-    public static void makePostRequestWithSingleParam(Context context, final String key, final String value) throws Exception
+    private String loadParametersToUrl(String url, String[] paramPairs){
+        if(paramPairs.length != 0){
+            url = url + QUESTION_MARK_SEPARATOR;
+        }
+        for(String paramPair : paramPairs){
+            url = url + paramPair;
+        }
+        return url;
+    }
+
+    public void makePostRequestWithSingleParam(Context context, final String key, final String value) throws Exception
     {
         // Instantiate the RequestQueue.
         com.android.volley.RequestQueue queue = Volley.newRequestQueue(context);
-        String url = ADDRESS + SEMICOLON_SEPARATOR + PORT + SLASH_SEPARATOR;
+        String url = ADDRESS + SEMICOLON_SEPARATOR + PORT;
 
         // Request a string response from the provided URL.
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
