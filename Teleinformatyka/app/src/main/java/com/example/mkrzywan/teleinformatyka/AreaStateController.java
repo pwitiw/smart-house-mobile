@@ -4,6 +4,12 @@ import android.content.Context;
 import android.graphics.Color;
 import android.view.View;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created by MKRZYWAN on 20.03.2016.
  */
@@ -33,7 +39,7 @@ public class AreaStateController implements OnResponseListener{
         this.pinsNumbers = pinsNumbers;
     }
 
-    protected void initialize(final IconFontButton lightBtn, IconFontButton ventilationBtn,
+    protected void initialize(final IconFontButton lightBtn, final IconFontButton ventilationBtn,
                               final IconFontButton rollerBlindsBtn, String [] rollerSymbols){
 
         this.rollerBlindsSymbols = rollerSymbols;
@@ -44,13 +50,13 @@ public class AreaStateController implements OnResponseListener{
             public void onClick(View v) {
                 light = !light;
 
+                actualizeVisualLightState(light);
+
                 if(light){
-                    lightButton.setTextColor(Color.parseColor("#651FFF"));
-                    sendHttpPostRequest(RasberryCommand.STATE_CHANGE, rasberryCommands[0]);
+                    sendHttpPostRequest(RasberryCommand.STATE_CHANGE, getParameterMap(rasberryCommands[0]));
                 }
                 else{
-                    lightButton.setTextColor(Color.BLACK);
-                    sendHttpPostRequest(RasberryCommand.STATE_CHANGE, rasberryCommands[1]);
+                    sendHttpPostRequest(RasberryCommand.STATE_CHANGE, getParameterMap(rasberryCommands[1]));
                 }
             }
         });
@@ -60,18 +66,16 @@ public class AreaStateController implements OnResponseListener{
             public void onClick(View v) {
                 ventilation = !ventilation;
 
-                if(ventilation){
-                    ventilationButton.setTextColor(Color.parseColor("#651FFF"));
+                actualizeVisualVentilationState(ventilation);
 
+                if(ventilation){
                     if(rasberryCommands.length > RasberryCommand.MINIMUM_ROOM_FUNCTIONS_NUMBER){
-                        sendHttpPostRequest(RasberryCommand.STATE_CHANGE, rasberryCommands[2]);
+                        sendHttpPostRequest(RasberryCommand.STATE_CHANGE, getParameterMap(rasberryCommands[2]));
                     }
                 }
                 else{
-                    ventilationButton.setTextColor(Color.BLACK);
-
                     if(rasberryCommands.length > RasberryCommand.MINIMUM_ROOM_FUNCTIONS_NUMBER){
-                        sendHttpPostRequest(RasberryCommand.STATE_CHANGE, rasberryCommands[3]);
+                        sendHttpPostRequest(RasberryCommand.STATE_CHANGE, getParameterMap(rasberryCommands[3]));
                     }
                 }
             }
@@ -99,7 +103,7 @@ public class AreaStateController implements OnResponseListener{
                 }
 
                 if(rasberryCommands.length > RasberryCommand.MINIMUM_ROOM_FUNCTIONS_NUMBER && httpRequestIndex != -1) {
-                    sendHttpPostRequest(RasberryCommand.STATE_CHANGE, rasberryCommands[httpRequestIndex]);
+                    sendHttpPostRequest(RasberryCommand.STATE_CHANGE, getParameterMap(rasberryCommands[httpRequestIndex]));
                 }
             }
         });
@@ -107,10 +111,34 @@ public class AreaStateController implements OnResponseListener{
         checkCurrentStates();
     }
 
+    private void actualizeVisualLightState(boolean light){
+        if(light){
+            lightButton.setTextColor(Color.parseColor("#651FFF"));
+        }
+        else{
+            lightButton.setTextColor(Color.BLACK);
+        }
+    }
+
+    private void actualizeVisualVentilationState(boolean ventilation){
+        if(ventilation){
+            ventilationButton.setTextColor(Color.parseColor("#651FFF"));
+        }
+        else{
+            ventilationButton.setTextColor(Color.BLACK);
+        }
+    }
+
     private void checkCurrentStates(){
         for(int i = 0; i<pinsNumbers.length; i++)
         {
-            httpHelper.makeGetRequest(context, pinsNumbers[i], this);
+            Map<String, String> params = new HashMap<>();
+            params.put(RasberryCommand.PIN_NUMBER, pinsNumbers[i] + "");
+            try {
+                httpHelper.makePostRequestWithSingleParam(context, this, RasberryCommand.ACTION_GET_STATE, params);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
     }
@@ -121,6 +149,8 @@ public class AreaStateController implements OnResponseListener{
         }else{
             light = true;
         }
+
+        actualizeVisualLightState(light);
     }
 
     private void setVentilation(String value){
@@ -129,11 +159,14 @@ public class AreaStateController implements OnResponseListener{
         }else{
             ventilation = true;
         }
+
+        actualizeVisualVentilationState(ventilation);
     }
 
     private void setRollerBlindsState(String value){
         int index = Integer.parseInt(value);
         rollerBlindsState = RollerBlindsState.values()[index];
+        rollerBlindsButton.setText(rollerBlindsSymbols[index]);
     }
 
     public void turnLightOn(){
@@ -168,36 +201,56 @@ public class AreaStateController implements OnResponseListener{
         this.rollerBlindsState = rollerBlindsState;
     }
 
-    private void sendHttpPostRequest(String key, String value){
+    private void sendHttpPostRequest(String activityType, Map<String, String> paramsMap){
         try {
-            httpHelper.makePostRequestWithSingleParam(context, key, value);
+            httpHelper.makePostRequestWithSingleParam(context, this, activityType, paramsMap);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
         @Override
-    public void onResponse(int key, String response) {
+    public void onResponse(String response) {
+
+            JSONObject fieldsJson = null;
+            int pinNumber = -1;
+            String state = null;
+            try {
+                fieldsJson = new JSONObject(response);
+                pinNumber = Integer.parseInt(fieldsJson.getString(RasberryCommand.PIN_NUMBER));
+                state = fieldsJson.getString(RasberryCommand.STATE);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
 
             if(pinsNumbers.length == 0){
                 return;
             }
 
-            if(key == pinsNumbers[0]){
-                setLight(response);
+            if(pinNumber == pinsNumbers[0]){
+                setLight(state);
             }
 
             if(pinsNumbers.length <= RasberryCommand.MINIMUM_ROOM_FUNCTIONS_NUMBER){
                 return;
             }
 
-            if(key == pinsNumbers[1]){
-                setVentilation(response);
+            if(pinNumber == pinsNumbers[1]){
+                setVentilation(state);
             }
 
-            if(key == pinsNumbers[2]){
-                setRollerBlindsState(response);
+            if(pinNumber == pinsNumbers[2]){
+                setRollerBlindsState(state);
             }
 
         }
+
+    private Map<String, String> getParameterMap(String data){
+        Map<String, String> params = new HashMap<>();
+        String [] paramsArray = data.split("-");
+        params.put(RasberryCommand.PIN_NUMBER, paramsArray[0]);
+        params.put(RasberryCommand.STATE, paramsArray[1]);
+
+        return params;
+    }
 }

@@ -17,7 +17,7 @@ import java.util.Map;
  */
 public class HttpHelper {
 
-    private static String ADDRESS = "http://192.168.0.101";
+    private static String ADDRESS = "http://192.168.0.100";
     private static String PORT = "5000";
     private static String SEMICOLON_SEPARATOR = ":";
     private static String SLASH_SEPARATOR = "/";
@@ -48,7 +48,7 @@ public class HttpHelper {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        listener.onResponse(pinNumber, response);
+                        listener.onResponse(response);
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -68,17 +68,18 @@ public class HttpHelper {
         return url;
     }
 
-    public void makePostRequestWithSingleParam(Context context, final String key, final String value) throws Exception
+    public void makePostRequestWithSingleParam(Context context, final OnResponseListener listener, final String activityType, final Map<String, String> parameters) throws Exception
     {
         // Instantiate the RequestQueue.
         com.android.volley.RequestQueue queue = Volley.newRequestQueue(context);
-        String url = ADDRESS + SEMICOLON_SEPARATOR + PORT;
+        String url = ADDRESS + SEMICOLON_SEPARATOR + PORT + SLASH_SEPARATOR + activityType;
 
         // Request a string response from the provided URL.
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+                        listener.onResponse(response);
                         Log.i("RESPONSE: ", response);
                     }
                 }, new Response.ErrorListener() {
@@ -90,10 +91,7 @@ public class HttpHelper {
             @Override
             protected Map<String, String> getParams()
             {
-                Map<String, String>  params = new HashMap<String, String>();
-                params.put(key, value);
-
-                return params;
+                return parameters;
             }
         };
         // Add the request to the RequestQueue.
